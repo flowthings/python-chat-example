@@ -1,0 +1,58 @@
+
+body {
+	font-family: "Source Sans Pro","Helvetica Neue","Arial",sans-serif;
+}
+
+
+#logo #flow {
+	width: 80px;
+	margin-top:2px;
+}
+
+#logo #chat {
+	font-weight: 100;
+	font-size: 28px;
+	color: #81CEEC;
+	font-family: "Source Sans Pro","Helvetica Neue","Arial",sans-serif;
+	line-height: 10px;
+}
+
+#logo {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+#mainContent {
+	text-align: left;
+	width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 30px;
+}
+
+.bold {
+	font-weight: bolder;
+}
+
+#chatbox{
+	border-width:1px;
+	border-color:#BBB;
+	border-style:solid;
+	height:300px; 
+	overflow-y:scroll
+}
+
+.chatline{
+	margin: 2px 2px 2px 2px;
+	text-align: left;
+	padding-left: 10px;
+}
+
+label {
+	display: block;
+}
+
+.chatinput {
+	display:block;
+	width: 100%;
+}
