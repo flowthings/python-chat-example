@@ -1,9 +1,8 @@
-flowthings 10 Minute Chat in Python
----
+## 10 Minute Chat in Python
 
 A small example application using the `flowthings.io` platform
 
-## Installation
+### Installation
 This application was built using Python 2.x and Bottle.
 
 Within the project directory:
