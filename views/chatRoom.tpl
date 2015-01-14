@@ -2,11 +2,11 @@
 <html>
 <head>
 	<title>10 Minute Flow Chat</title>
-	<link rel="stylesheet" type="text/css" href="static/style.css" />
+	<link rel="stylesheet" type="text/css" href="../static/style.css" />
 	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script>
-		var count={{timeLeft}};
+		var count={{time_left}};
 		var connection;
  
 		/**
@@ -38,7 +38,7 @@
 			    "msgId": "chat-request",
 			    "object": "drop",
 			    "type": "subscribe",
-			    "flowId": "{{receiveFlow}}"
+			    "flowId": "{{receive_flow}}"
 			});
 		}
 
@@ -50,7 +50,7 @@
 				"msgid" : "chat-msg", 
 				"object" : "drop", 
 				"type" : "create", 
-				"flowId" : "{{sendFlow}}", 
+				"flowId" : "{{send_flow}}", 
 				"value" : {
 					"elems" : {
 						"user" : username, 
@@ -103,10 +103,10 @@
 				Set up WebSockets
 			*/
 			request = $.ajax({
-			        url: "https://{{wsHost}}/session",
+			        url: "https://{{ws_host}}/session",
 			        beforeSend: function (req){
-                		req.setRequestHeader("X-Auth-Token", "{{tokenString}}");
-                		req.setRequestHeader("X-Auth-Account", "{{flowUser}}");
+                		req.setRequestHeader("X-Auth-Token", "{{token_string}}");
+                		req.setRequestHeader("X-Auth-Account", "{{flow_user}}");
                 		req.withCredentials = true
             		},
 			        type: "post",
@@ -114,7 +114,7 @@
 			        success: function(data){
 
 			        	var sessionId = data["body"]["id"]
-			        	var url = "ws://{{wsHost}}/session/" + sessionId + "/ws";
+			        	var url = "ws://{{ws_host}}/session/" + sessionId + "/ws";
 
 			        	connection = new WebSocket(url);
 
@@ -147,10 +147,10 @@
 <body>
 <div style="text-align:center">
 <div id="logo">
-	<img id="flow" src="static/flow-logo.svg" />
+	<img id="flow" src="../static/flow-logo.svg" />
 	<span id="chat">things.... Chat!</span>
 </div>
-<h3 id="timer">Time Left: {{timeLeft}} seconds</h3>
+<h3 id="timer">Time Left: {{time_left}} seconds</h3>
 <p><span class="bold">Banned words:</span> "XML", "Enterprise Java Beans"</p>
 <div id="mainContent">
 <div id="chatbox">
@@ -161,8 +161,8 @@
 <label for="content">Message:</label>
 <input type="text" id="content" name="content" class="chatinput">
 <input type="submit" value="Send it!" />
-<input type="hidden" name="room" value="{{tokenString}}" />
-<input type="hidden" name="destination" value="{{sendFlow}}" />
+<input type="hidden" name="room" value="{{token_string}}" />
+<input type="hidden" name="destination" value="{{send_flow}}" />
 </form>
 </div>
 </div>

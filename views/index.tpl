@@ -26,7 +26,7 @@
 
 	<span class="bold">NOTE: </span> If this is your first run, you must <a href="/setup">set up</a> the demo.
 </div>
-<form action="/createRoom" method="GET">
+<form action="/room/create" method="GET">
 	<input type="submit" value="Create new chat room"/>
 </form>
 

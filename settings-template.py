@@ -1,11 +1,11 @@
-SETTINGS = dict(
+SETTINGS = {
 	## Your flowthings.io username
-	user="<your username>",
+	"user"="<your username>",
 
 	## Your flowthings.io Master Token
-	masterToken="<your master token>",
+	"master_token"="<your master token>",
 
 	## The host and port to run this example on
-	host="localhost",
-	port=8100
-)
+	"host"="localhost",
+	"port"=8100
+}

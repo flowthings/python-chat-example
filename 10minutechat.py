@@ -7,29 +7,31 @@ import time
 import functools
 
 ##
-## Settings
+# Settings
 ##
 user = SETTINGS["user"]
-masterToken = SETTINGS["masterToken"]
-creds = Token(user, masterToken)
+master_token = SETTINGS["master_token"]
+creds = Token(user, master_token)
 api = API(creds, host="api.flowthings.io", secure=True)
-appPath = "/%s/10minutechat" % (user)
+app_path = "/%s/10minutechat" % (user)
 host = SETTINGS["host"]
 port = SETTINGS["port"]
 
 
 ##
-## Create a Flow
+# Create a Flow
 ##
-def createFlow(path):
-	return api.flow.create({'path' : path, 'capacity' : 0})
+def create_flow(path):
+    return api.flow.create({'path': path, 'capacity': 0})
 
-## 
-## Create the Track between Flows
 ##
-def createTrack(source, destination):
+# Create the Track between Flows
+##
 
-	jsFunc = """function (input){
+
+def create_track(source, destination):
+
+    js_func = """function (input){
 	    var acceptableWords = ['Loosely-Coupled Architecture', 'JSON'];
 
 	    var text = input.elems.message.value;
@@ -46,113 +48,128 @@ def createTrack(source, destination):
 	    return input;
 	  }"""
 
-	return api.track.create({'source' : source, 'destination' : destination,
-		'js' : jsFunc})
+    return api.track.create({'source': source, 'destination': destination,
+                             'js': js_func})
 
 ##
-## Create a Token
+# Create a Token
 ##
-def createToken(receivePath, sendPath):
-	millis = int(round(time.time() * 1000))
-	return api.token.create({
-		sendPath : {'dropRead' : False, 'dropWrite' :  True},
-		receivePath : {'dropRead' : True, 'dropWrite' : False}},
-		expires_in_ms=millis+600000)
 
-##
-## Utility Functions
-##
-def createApi(tokenString):
-	return API(Token(user, tokenString), host="api.flowthings.io", secure=False, ws_host="ws.flowthings.io")
 
-def chatLink(tokenString):
-	return "http://%s:%s/chat?room=%s" % (host, port, tokenString)
-
-def basePathCreated():
-	resp = api.flow.find(mem.path==appPath)
-	print str(resp)
-	return len(resp) > 0
-
-def randomPath():
-	return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(9))
-
-def createApplication():
-	if (basePathCreated() == False):
-		resp = api.flow.create({'path' : appPath})
-
-	return "Application ready to rock!"
+def create_token(receive_path, send_path):
+    millis = int(round(time.time() * 1000))
+    return api.token.create({
+        send_path: {'dropRead': False, 'dropWrite':  True},
+        receive_path: {'dropRead': True, 'dropWrite': False}},
+        expires_in_ms=millis + 600000)
 
 ##
-## Routes
+# Utility Functions
 ##
+
+
+def create_api(token_string):
+    return API(Token(user, token_string), host="api.flowthings.io", secure=False, ws_host="ws.flowthings.io")
+
+
+def chat_link(token_string):
+    return "http://%s:%s/room/join?room=%s" % (host, port, token_string)
+
+
+def base_path_created():
+    resp = api.flow.find(mem.path == app_path)
+    print str(resp)
+    return len(resp) > 0
+
+
+def random_path():
+    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(9))
+
+
+def create_application():
+    if (base_path_created() == False):
+        resp = api.flow.create({'path': app_path})
+
+    return "Application ready to rock!"
+
+##
+# Routes
+##
+
+
 @route('/static/<filename>')
 def server_static(filename):
     return static_file(filename, root='static/')
 
+
 @route('/')
 @view('index')
 def index():
-	return {}
+    return {}
+
 
 @route('/finished')
 @view('finished')
 def finished():
-	return {}
+    return {}
 
-@route('/createRoom')
-@view('roomCreated')
+
+@route('/room/create')
+@view('roomcreated')
 def create():
-	
-	## Room Base Path
-	roomPath = "%s/%s/" % (appPath, randomPath())
-	api.flow.create({'path' : roomPath})
 
-	## Create Flows
-	sendFlow = createFlow("%s/send" % roomPath)
-	receiveFlow = createFlow("%s/receive" % roomPath)
-	
-	print ("Send Flow is: (%s , %s)" % (sendFlow["id"], sendFlow["path"]))
-	print ("Receive Flow is: (%s , %s)" % (receiveFlow["id"], receiveFlow["path"]))
+    # Room Base Path
+    room_path = "%s/%s/" % (app_path, random_path())
+    api.flow.create({'path': room_path})
 
-	track = createTrack(sendFlow["path"], receiveFlow["path"])
-	
-	print ("Track is: (%s)" % (track["id"]))
-	
-	token = createToken(receiveFlow["path"], sendFlow["path"])
+    # Create Flows
+    send_flow = create_flow("%s/send" % room_path)
+    receive_flow = create_flow("%s/receive" % room_path)
 
-	print ("Token is: (%s)" % (token["tokenString"]))
+    print("Send Flow is: (%s , %s)" % (send_flow["id"], send_flow["path"]))
+    print("Receive Flow is: (%s , %s)" %
+          (receive_flow["id"], receive_flow["path"]))
 
-	return dict(url=chatLink(token["tokenString"]))
+    track = create_track(send_flow["path"], receive_flow["path"])
+
+    print("Track is: (%s)" % (track["id"]))
+
+    token = create_token(receive_flow["path"], send_flow["path"])
+
+    print("Token is: (%s)" % (token["tokenString"]))
+
+    return {"url":chat_link(token["tokenString"])}
+
 
 @route('/setup')
 def setup():
-	return createApplication()
+    return create_application()
 
-@route('/chat')
-@view('chatRoom')
+
+@route('/room/join')
+@view('chatroom')
 def chat():
-	tokenString = request.query.room
+    token_string = request.query.room
 
-	## Create the restricted API
-	chatApi = createApi(tokenString)
+    # Create the restricted API
+    chat_api = create_api(token_string)
 
-	## Query send and receive
-	try:
-		receiveFlow = chatApi.flow.find(mem.path.re('receive$', 'i'))[0]
-		sendFlow = chatApi.flow.find(mem.path.re('send$', 'i'))[0]
-	except:
-		redirect("/finished")
+    # Query send and receive
+    try:
+        receive_flow = chat_api.flow.find(mem.path.re('receive$', 'i'))[0]
+        send_flow = chat_api.flow.find(mem.path.re('send$', 'i'))[0]
+    except:
+        redirect("/finished")
 
-	## Query how long we have left
-	tokenObject = chatApi.token.find()[0]
-	expires = tokenObject['expiresInMs']
-	now = int(round(time.time() * 1000))
-	timeLeft = (expires - now) / 1000
+    # Query how long we have left
+    token_object = chat_api.token.find()[0]
+    expires = token_object['expiresInMs']
+    now = int(round(time.time() * 1000))
+    time_left = (expires - now) / 1000
+
+    return {"token_string":token_string, "receive_flow":receive_flow["id"], "send_flow":send_flow["id"], 
+            "time_left":time_left, "flow_user":user, "ws_host":"ws.flowthings.io"}
 
 
-	return dict(tokenString=tokenString, receiveFlow=receiveFlow["id"], sendFlow=sendFlow["id"], timeLeft=timeLeft,
-		flowUser=user, wsHost="ws.flowthings.io")
-
-
-## Run the server
+# Run the server
 run(host=host, port=port, debug=True)
