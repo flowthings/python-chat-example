@@ -6,6 +6,6 @@ SETTINGS = dict(
 	masterToken="<your master token>",
 
 	## The host and port to run this example on
-	host="192.168.11.131",
+	host="localhost",
 	port=8100
 )
