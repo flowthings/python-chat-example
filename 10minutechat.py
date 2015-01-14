@@ -115,7 +115,7 @@ def finished():
 
 
 @route('/room/create')
-@view('roomcreated')
+@view('created')
 def create():
 
     # Room Base Path
@@ -147,7 +147,7 @@ def setup():
 
 
 @route('/room/join')
-@view('chatroom')
+@view('room')
 def chat():
     token_string = request.query.room
 
