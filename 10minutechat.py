@@ -1,4 +1,5 @@
-from bottle import route, run, request, response, template, view, post, static_file, redirect
+from bottle import route, run, request, response, template, view, post, 
+                    static_file, redirect
 from flow_things import API, Token, mem, MATCHES
 from settings import SETTINGS
 import random
@@ -69,7 +70,9 @@ def create_token(receive_path, send_path):
 
 
 def create_api(token_string):
-    return API(Token(user, token_string), host="api.flowthings.io", secure=False, ws_host="ws.flowthings.io")
+    return API(
+        Token(user, token_string), host="api.flowthings.io", 
+        secure=False, ws_host="ws.flowthings.io")
 
 
 def chat_link(token_string):
@@ -83,7 +86,8 @@ def base_path_created():
 
 
 def random_path():
-    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(9))
+    return ''.join(random.choice(
+        string.ascii_uppercase + string.digits) for _ in range(9))
 
 
 def create_application():
@@ -167,8 +171,9 @@ def chat():
     now = int(round(time.time() * 1000))
     time_left = (expires - now) / 1000
 
-    return {"token_string":token_string, "receive_flow":receive_flow["id"], "send_flow":send_flow["id"], 
-            "time_left":time_left, "flow_user":user, "ws_host":"ws.flowthings.io"}
+    return {"token_string":token_string, "receive_flow":receive_flow["id"], 
+            "send_flow":send_flow["id"], "time_left":time_left, 
+            "flow_user":user, "ws_host":"ws.flowthings.io"}
 
 
 # Run the server
