@@ -3,6 +3,7 @@
 A small example application using the `flowthings.io` platform
 
 ### Installation
+
 This application was built using Python 2.x and Bottle.
 
 Within the project directory:
@@ -15,6 +16,7 @@ env/bin/python 10minutechat.py
 Browse to `localhost:8100` (or whatever you set your host / port to).
 
 ### Overview
+
 The application demonstrates the following:
 
 * A [Flow](https://flowthings.io/docs/flow-object-overview) to which we will send new chat messages
@@ -23,12 +25,14 @@ The application demonstrates the following:
 * A restricted [Token](https://flowthings.io/docs/flow-object-overview) object, which will be used for all participants of the chat room.
 
 ### Code Walkthrough
+
 The main code is within these files:
 
 * 10minutechat.py
 * views/room.tpl
 
 #### The Python Client
+
 The demo uses the `flowthings.io` [Python Client](https://github.com/flowdotnet/flow-python-client-iot), the Bottle web framework, and JavaScript.
 
 We begin by setting up the Python library:
@@ -51,7 +55,7 @@ We could put all of our chat rooms in our root Path, but to keep everything cont
 This Flow won't itself hold any data. You can think of it as creating a directory on a Unix filesystem.
 
 #### Creating the Send / Receive Flows
----
+
 Each time a user requests a new Chat Room, we'll first pick a new random path, and create the Flows we need under the path:
 
 ```python
@@ -72,7 +76,7 @@ Each time a user requests a new Chat Room, we'll first pick a new random path, a
  We have a choice here regarding the `capacity` of these Flows. A Flow's capacity determines how many Drops will be persisted on the platform before old Drops are deleted. A capacity of `0` will prevent any Drops from being persisted, but they will still move through the system like any other Drop.
 
 #### Creating the Track and Filtering Logic
----
+
 We need to create a Track between the `send` and `receive` Flows, and attach our content filtering JavaScript.
 
 ```python
@@ -99,7 +103,7 @@ We need to create a Track between the `send` and `receive` Flows, and attach our
 The JavaScript snippet is executed whenever a chat message is sent. For each chat message, we scan the content for a list of "forbidden" words. When we detect one, we replace the word with a randomly-selected "authorized" word, before returning it. This "sanitized" Drop is delivered to the `receive` Flow for everyone to view.
 
 #### Creating the Limited-access Token
----
+
 We can use a Token to grant limited access to the chatroom, with a 10 minute expiry. We can't have users consuming messages that haven't been sanitized of course, so we grant write-only access to the `send` Flow. We also don't want users bypassing the content-filter, so we grant read-only access to the `receive` Flow.
 
 Finally, we set an expiry time of 10 minutes in the future.
@@ -121,6 +125,7 @@ The client returns an object representing a Token. This string is what the chat 
 ```
 
 #### WebSockets 
+
 On the JavaScript side, after page-load we set up a Web Sockets connection, using the Token String previously generated. Once [authenticated](https://flowthings.io/docs/flowthings-websockets-api-authentication), we can subscribe to all messages from the Receive Flow:
 
 ```javascript
