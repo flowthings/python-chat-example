@@ -1,5 +1,5 @@
 from bottle import route, run, request, response, template, view, post, static_file, redirect
-from flow_things import API, Token, mem, MATCHES
+from flowthings import API, Token, mem, MATCHES
 from settings import SETTINGS
 import random
 import string
@@ -59,9 +59,11 @@ def create_track(source, destination):
 def create_token(receive_path, send_path):
     millis = int(round(time.time() * 1000))
     return api.token.create({
-        send_path: {'dropRead': False, 'dropWrite':  True},
-        receive_path: {'dropRead': True, 'dropWrite': False}},
-        expires_in_ms=millis + 600000)
+        "paths" : {
+            send_path: {'dropRead': False, 'dropWrite':  True},
+            receive_path: {'dropRead': True, 'dropWrite': False}
+        },
+        "expiresInMs" : millis + 600000})
 
 ##
 # Utility Functions

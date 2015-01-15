@@ -1,2 +1,2 @@
 bottle
-git+ssh://git@github.com:flowthings/python-client.git
+git+https://github.com/flowthings/python-client.git
