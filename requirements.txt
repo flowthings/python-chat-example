@@ -1,2 +1,2 @@
 bottle
-git+ssh://git@github.com/flowdotnet/flow-python-client-iot
+git+ssh://git@github.com:flowthings/python-client.git

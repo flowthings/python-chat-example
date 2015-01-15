@@ -1,5 +1,4 @@
-from bottle import route, run, request, response, template, view, post, 
-                    static_file, redirect
+from bottle import route, run, request, response, template, view, post, static_file, redirect
 from flow_things import API, Token, mem, MATCHES
 from settings import SETTINGS
 import random
@@ -72,7 +71,7 @@ def create_token(receive_path, send_path):
 def create_api(token_string):
     return API(
         Token(user, token_string), host="api.flowthings.io", 
-        secure=False, ws_host="ws.flowthings.io")
+        secure=True, ws_host="ws.flowthings.io")
 
 
 def chat_link(token_string):
