@@ -11,8 +11,9 @@ Within the project directory:
 virtualenv env
 . env/bin/activate
 cp settings-template.py settings.py
-env/bin/pip install -r requirements.txt
-env/bin/python 10minutechat.py
+## Update the settings.py file with your Flow account details
+pip install -r requirements.txt
+python 10minutechat.py
 ```
 Browse to `localhost:8100` (or whatever you set your host / port to).
 
