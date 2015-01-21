@@ -111,11 +111,12 @@ We can use a Token to grant limited access to the chatroom, with a 10 minute exp
 Finally, we set an expiry time of 10 minutes in the future.
 
 ```python
-	millis = int(round(time.time() * 1000))
 	token-object = api.token.create({
-	        send_flow_path: {'dropRead': False, 'dropWrite':  True},
-	        receive_flow_path: {'dropRead': True, 'dropWrite': False}},
-	        expires_in_ms=millis + 600000)
+        "paths" : {
+            send_path: {'dropRead': False, 'dropWrite':  True},
+            receive_path: {'dropRead': True, 'dropWrite': False}
+        },
+        "duration" : 600000})
 
 ```
 

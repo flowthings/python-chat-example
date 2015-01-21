@@ -57,13 +57,12 @@ def create_track(source, destination):
 
 
 def create_token(receive_path, send_path):
-    millis = int(round(time.time() * 1000))
     return api.token.create({
         "paths" : {
             send_path: {'dropRead': False, 'dropWrite':  True},
             receive_path: {'dropRead': True, 'dropWrite': False}
         },
-        "expiresInMs" : millis + 600000})
+        "duration" : 600000})
 
 ##
 # Utility Functions
@@ -169,8 +168,7 @@ def chat():
     # Query how long we have left
     token_object = chat_api.token.find()[0]
     expires = token_object['expiresInMs']
-    now = int(round(time.time() * 1000))
-    time_left = (expires - now) / 1000
+    time_left = expires / 1000
 
     return {"token_string":token_string, "receive_flow":receive_flow["id"], 
             "send_flow":send_flow["id"], "time_left":time_left, 
