@@ -1,2 +1,2 @@
 bottle
-git+https://github.com/flowthings/python-client.git
+flowthings
