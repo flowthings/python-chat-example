@@ -136,7 +136,7 @@
 			        }
 			    });
 			// Add a default message
-			addMessage("System", "Welcome to 10-minute Flow Chat!")
+			addMessage("System", "Welcome to 10-minute Flowthings Chat!")
 
 			// Start the countdown
 			var counter=setInterval(timer, 1000);

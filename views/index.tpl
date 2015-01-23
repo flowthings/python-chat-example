@@ -21,7 +21,7 @@
 %end
 	<p>Visit <a href="http://flowthings.io">flowthings.io</a> for more info</p>	
 
-	Welcome to 10-minute Flow Chat. This demonstration uses the following FlowThings platform objects:
+	Welcome to 10-minute Flowthings Chat. This demonstration uses the following Flowthings platform objects:
 
 	<ul>
 		<li>A <a href="https://flowthings.io/docs/flow-object-overview">Flow</a> to which we will send new chat messages</li>
