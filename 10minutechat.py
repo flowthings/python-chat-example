@@ -109,7 +109,14 @@ def server_static(filename):
 @route('/')
 @view('index')
 def index():
-    return {}
+    valid_settings=True
+
+    try:
+        create_application()
+    except:
+        valid_settings=False
+
+    return {"valid_settings" : valid_settings}
 
 
 @route('/finished')
@@ -120,7 +127,7 @@ def finished():
 
 @route('/room/create')
 @view('created')
-def create():
+def create():      
 
     # Room Base Path
     room_path = "%s/%s/" % (app_path, random_path())
@@ -143,11 +150,6 @@ def create():
     print("Token is: (%s)" % (token["tokenString"]))
 
     return {"url":chat_link(token["tokenString"])}
-
-
-@route('/setup')
-def setup():
-    return create_application()
 
 
 @route('/room/join')

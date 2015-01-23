@@ -56,3 +56,8 @@ label {
 	display:block;
 	width: 100%;
 }
+
+#warning {
+	background-color: #FF8B8B;
+	padding: 3px;
+}

@@ -13,6 +13,12 @@
 </div>
 
 <div id="mainContent">
+
+%if valid_settings == False:
+<div id="warning">
+	Your username and / or Master Token settings are invalid! Please double check your settings.py file!
+</div>
+%end
 	<p>Visit <a href="http://flowthings.io">flowthings.io</a> for more info</p>	
 
 	Welcome to 10-minute Flow Chat. This demonstration uses the following FlowThings platform objects:
@@ -24,7 +30,6 @@
 		<li>A restricted <a href="https://flowthings.io/docs/token-object-overview">Token</a> object, which will be used for all participants of the chat room</li>
 	</ul> 
 
-	<span class="bold">NOTE: </span> If this is your first run, you must <a href="/setup">set up</a> the demo.
 </div>
 <form action="/room/create" method="GET">
 	<input type="submit" value="Create new chat room"/>
