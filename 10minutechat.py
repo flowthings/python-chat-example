@@ -1,14 +1,13 @@
-from bottle import route, run, request, response, template, view, post, static_file, redirect
-from flowthings import API, Token, mem, MATCHES
+from bottle import route, run, request, view, static_file, redirect
+from flowthings import API, Token, mem
 from settings import SETTINGS
 import random
 import string
-import time
-import functools
 
 ##
 # Settings
 ##
+
 user = SETTINGS["user"]
 master_token = SETTINGS["master_token"]
 creds = Token(user, master_token)
@@ -21,6 +20,7 @@ port = SETTINGS["port"]
 ##
 # Create a Flow
 ##
+
 def create_flow(path):
     return api.flow.create({'path': path, 'capacity': 0})
 
@@ -28,25 +28,24 @@ def create_flow(path):
 # Create the Track between Flows
 ##
 
-
 def create_track(source, destination):
 
     js_func = """function (input){
-	    var acceptableWords = ['Loosely-Coupled Architecture', 'JSON'];
+  var acceptableWords = ['Loosely-Coupled Architecture', 'JSON'];
 
-	    var text = input.elems.message.value;
-	    var forbiddenWords = new RegExp('Enterprise Java Beans|XML','ig');
+  var text = input.elems.message.value;
+  var forbiddenWords = new RegExp('Enterprise Java Beans|XML','ig');
 
-	    function randomAcceptableWord(){
-		    var index = Math.floor(Math.random()*(acceptableWords.length)+0);
-		    return acceptableWords[index];
-	    }
+  function randomAcceptableWord(){
+    var index = Math.floor(Math.random()*(acceptableWords.length)+0);
+    return acceptableWords[index];
+  }
 
-	    text = text.replace(forbiddenWords, randomAcceptableWord());
+  text = text.replace(forbiddenWords, randomAcceptableWord());
 
-	    input.elems.message.value = text
-	    return input;
-	  }"""
+  input.elems.message.value = text
+    return input;
+  }"""
 
     return api.track.create({'source': source, 'destination': destination,
                              'js': js_func})
@@ -54,7 +53,6 @@ def create_track(source, destination):
 ##
 # Create a Token
 ##
-
 
 def create_token(receive_path, send_path):
     return api.token.create({
@@ -68,10 +66,9 @@ def create_token(receive_path, send_path):
 # Utility Functions
 ##
 
-
 def create_api(token_string):
     return API(
-        Token(user, token_string), host="api.flowthings.io", 
+        Token(user, token_string), host="api.flowthings.io",
         secure=True, ws_host="ws.flowthings.io")
 
 
@@ -93,13 +90,11 @@ def random_path():
 def create_application():
     if (base_path_created() == False):
         resp = api.flow.create({'path': app_path})
-
     return "Application ready to rock!"
 
 ##
 # Routes
 ##
-
 
 @route('/static/<filename>')
 def server_static(filename):
@@ -127,7 +122,7 @@ def finished():
 
 @route('/room/create')
 @view('created')
-def create():      
+def create():
 
     # Room Base Path
     room_path = "%s/%s/" % (app_path, random_path())
@@ -172,10 +167,9 @@ def chat():
     expires = token_object['expiresInMs']
     time_left = expires / 1000
 
-    return {"token_string":token_string, "receive_flow":receive_flow["id"], 
-            "send_flow":send_flow["id"], "time_left":time_left, 
+    return {"token_string":token_string, "receive_flow":receive_flow["id"],
+            "send_flow":send_flow["id"], "time_left":time_left,
             "flow_user":user, "ws_host":"ws.flowthings.io"}
-
 
 # Run the server
 run(host=host, port=port, debug=True)
