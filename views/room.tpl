@@ -114,7 +114,7 @@
 			        success: function(data){
 
 			        	var sessionId = data["body"]["id"]
-			        	var url = "ws://{{ws_host}}/session/" + sessionId + "/ws";
+			        	var url = "wss://{{ws_host}}/session/" + sessionId + "/ws";
 
 			        	connection = new WebSocket(url);
 
