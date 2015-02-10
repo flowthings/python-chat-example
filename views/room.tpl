@@ -51,7 +51,7 @@ function subscribe() {
 
 function dropMessage(username, content) {
   return JSON.stringify({
-    "msgid": "chat-msg",
+    "msgId": "chat-msg",
     "object": "drop",
     "type": "create",
     "flowId": "{{send_flow}}",
